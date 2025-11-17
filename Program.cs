@@ -42,7 +42,7 @@ builder.Services.AddAuthentication(op =>
     op.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     op.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
-    .AddJwtBearer(o=>
+    .AddJwtBearer(o =>
     {
         o.RequireHttpsMetadata = false;
         o.SaveToken = false;
@@ -56,8 +56,15 @@ builder.Services.AddAuthentication(op =>
             ValidAudience = builder.Configuration["JWT:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
 
-         };
-     });
+        };
+    });
+
+
+// Allow CORS
+builder.Services.AddCors(options => options.AddPolicy("AllowAll", policy =>
+{
+    policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+}));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -73,7 +80,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
 app.UseHttpsRedirection();
+
+app.UseCors("AllowAll");
 
 app.UseAuthentication();
 app.UseAuthorization();
