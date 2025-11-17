@@ -38,7 +38,7 @@ namespace BlogBackEnd.Controllers
             // return Ok(new { token = result.Token, expiresOn = result.ExpiresOn });
 
         }
-        [Authorize(Roles = "Admin")]
+        // [Authorize(Roles = "Admin")]
         [HttpPost("addrole")]
         public async Task<IActionResult> AddRoleAsync([FromBody] AddRoleModel model)
         {
